@@ -4,10 +4,9 @@ class Conexao {
 	private static $conexao = null;
 
 	function __construct() {
-
 		// Conexão Local
 		$db_host = "localhost";
-		$db_nome = "database";
+		$db_nome = "pet_shop";
 		$db_usuario = "root";
 		$db_senha = "";
 		$db_driver = "mysql";

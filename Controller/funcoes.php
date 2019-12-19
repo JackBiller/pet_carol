@@ -24,13 +24,11 @@ class Generico extends PadraoObjeto {
 
 function padraoResultado($pdo, $sql, $msm){
 	$arrayResultado = array();
-	$contIten = 0;
-	$verifica = $pdo->query($sql); $cont = 0;
+	$verifica = $pdo->query($sql);
 	foreach ($verifica as $dados) {
 		array_push($arrayResultado, new Generico($dados));
-		$cont++;
 	}
-	if($cont == 0) array_push($arrayResultado, new FalseDebug($msm));
+	if(sizeof($arrayResultado) == 0) array_push($arrayResultado, new FalseDebug($msm));
 	return $arrayResultado;
 }
 
@@ -77,6 +75,13 @@ function eviarEmail($title, $body, $email){
 
 	// echo $mail->Send() ? '1' : '0';
 	return $mail->Send() ? '1' : '0';
+}
+
+function returnId($pdo, $hash){
+	$sql = "SELECT id_usuario FROM usuario WHERE hash = '$hash'";
+	$resultado = padraoResultado($pdo, $sql, 'Nenhum resultado encontrado!');
+	$resultado = $resultado[0];
+	return $resultado->get('debug') == 'OK' ? $resultado->get('id_usuario') : false;
 }
 
 
@@ -249,10 +254,23 @@ function objectEmJson($objeto){
 	$class_vars = get_class_vars(get_class($objeto));
 	$arrayObjeto = array();
 	// $arrayObjeto = [];
+	$namesClass = array();
 
+	$indiceVariable = -1;
 	foreach ($class_vars as $name => $value) {
-		array_push($arrayObjeto, $name , $objeto->get($name));
+		if($name == 'variable') $indiceVariable = sizeof($namesClass);
+		array_push($namesClass, $name);
 	}
+
+	if ($indiceVariable != -1) $namesClass = $objeto->get($namesClass[$indiceVariable]);
+
+	for ($i=0; $i < sizeof($namesClass); $i++) { 
+		array_push($arrayObjeto, $namesClass[$i], $objeto->get($namesClass[$i]));
+	}
+
+	// foreach ($class_vars as $name => $value) {
+	// 	array_push($arrayObjeto, $name , $objeto->get($name));
+	// }
 
 	$verifica = true;
 	$primeiro = true;

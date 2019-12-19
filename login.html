@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Título</title>
+	<title>Pet Carol</title>
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="biblioteca/bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="biblioteca/bower_components/font-awesome/css/font-awesome.min.css">
@@ -16,14 +16,14 @@
 	<div class="login-box">
 		<div class="login-logo">
 			<a href="#">
-				Título Projeto
+				Pet Carol
 			</a>
 		</div>
 		<div class="login-box-body">
-			<form action="controller/login.php" method="post">
+			<form id='formLogin' action="controller/login.php" method="post">
 				Login:
 				<div class="form-group has-feedback">
-					<input type="email" class="form-control" id="login" name="login">
+					<input type="text" class="form-control" id="login" name="login">
 				</div>
 				Senha:
 				<div class="form-group has-feedback">
@@ -47,6 +47,35 @@
 				checkboxClass: 'icheckbox_square-blue',
 				radioClass: 'iradio_square-blue',
 				increaseArea: '20%' /* optional */
+			});
+		});
+
+		$("#formLogin").submit(function(e){
+			e.preventDefault();
+			$.ajax({
+				  url: 'controller/login.php'
+				, type: 'POST'
+				, dataType: 'text'
+				, data: {
+					  'login': $("#login").val()
+					, 'senha': $("#senha").val()
+				}
+				, error: function(){
+					alert('Falha ao fazer a requisição!');
+				}
+			}).done(function(data){
+				console.log(data);
+				data = JSON.parse(data);
+				console.log(data);
+
+				if (data[0].debug == 'OK'){
+					localStorage.setItem('usuario',JSON.stringify(data[0]));
+					window.location.assign('principal.html');
+				} else {
+					alert('Login inválido!');
+					$("#login").val('')[0].focus();
+					$("#senha").val('');
+				}			
 			});
 		});
 	</script>

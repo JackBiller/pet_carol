@@ -1,0 +1,83 @@
+<div class="box-header with-border">
+	<h3 class="box-title">Cadastro de Produto</h3>
+
+	<div class="box-tools pull-right">
+		<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+			<i class="fa fa-minus"></i>
+		</button>
+		<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+			<i class="fa fa-times"></i>
+		</button>
+	</div>
+</div>
+<div class="box-body">
+	<!-- Cadastrar produto -->
+	<form id="formProduto">
+		Nome: 
+		<input type="text" class="form-control" id="nome" required>
+		Cor: 
+		<input type="color" class="form-control" id="cor" required>
+		Categoria: 
+		<select id="categoria" class="form-control" required>
+			<option value=""></option>
+			<option value="3">Alimentícia</option>
+			<option value="4">Vestuário</option>
+		</select>
+		<!-- Marca:  -->
+		<br>
+		<table width="100%">
+			<tr>
+				<td width="50%">
+					<button type="submit" class="btn btn-success btn-block">
+						<i class="fa fa-floppy-o"></i> Salvar
+					</button>
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary btn-block" onclick="novoProduto();">
+						<i class="fa fa-file-o"></i> Novo
+					</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div id="campo"></div>
+</div>
+<div class="box-footer">
+	<!-- Footer -->
+</div>
+
+<script>
+	$("#campo").html(""
+		+ "<h1>Ola</h1>"
+	)
+
+	$("#formProduto").submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			  url: 'controller/produto.php'
+			, type: 'POST'
+			, dataType: 'text'
+			, data: $.extend({}, usuario_Global, {
+				  'cadastrarProfuto': true
+				, 'nome': $("#nome").val()
+				, 'cor': $("#cor").val()
+				, 'categoria': $("#categoria").val()
+			})
+			, error: function(){
+				alert('Falha ao fazer a requisição!');
+			}
+		}).done(function(data){
+			console.log(data);
+			// if (data == 1) 	alert('Produto cadastrado com sucesso');
+			// else 			alert('Falha ao cadastrar produto');
+			alert(data == 1 ? 'Produto cadastrado com sucesso' : 'Falha ao cadastrar produto');
+			novoProduto();
+		})
+	})
+
+	function novoProduto() {
+		$("#nome").val('')[0].focus();
+		$("#cor").val('#000');
+		$("#categoria").val('');
+	}
+</script>
