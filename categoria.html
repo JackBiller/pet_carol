@@ -1,0 +1,141 @@
+<div class="box-header with-border">
+	<h3 class="box-title">Cadastro de Categoria</h3>
+
+	<div class="box-tools pull-right">
+		<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+			<i class="fa fa-minus"></i>
+		</button>
+		<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+			<i class="fa fa-times"></i>
+		</button>
+	</div>
+</div>
+<div class="box-body">
+
+	<ul class="nav nav-tabs">
+		<li name='menuCategoria' id='add_menuCategoria' class="active"
+				onclick="mudarPagina(this, 'add_ctxCategoria', 'menuCategoria', 'ctxCategoria');">
+			<a href="#">
+				<i class="fa fa-plus"></i> Adicionar
+			</a>
+		</li>
+		<li name='menuCategoria' id='list_menuCategoria'
+				onclick="mudarPagina(this, 'list_ctxCategoria', 'menuCategoria', 'ctxCategoria');">
+			<a href="#">
+				<i class="fa fa-list"></i> Listar
+			</a>
+		</li>
+	</ul>
+
+	<div id="add_ctxCategoria" name="ctxCategoria">
+		<form id="formCategoria">
+			Descrição: 
+			<input type="text" class="form-control" id="descricao" required>
+			<br>
+			<table width="100%">
+				<tr>
+					<td width="50%">
+						<button type="submit" class="btn btn-success btn-block">
+							<i class="fa fa-floppy-o"></i> Salvar
+						</button>
+					</td>
+					<td>
+						<button type="button" class="btn btn-primary btn-block" onclick="novoCategoria();">
+							<i class="fa fa-file-o"></i> Novo
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id="list_ctxCategoria" name="ctxCategoria" style="display: none;">
+		<div id="listaCategoria"></div>
+	</div>
+</div>
+<div class="box-footer">
+	<!-- Footer -->
+</div>
+
+<script>
+
+var categorias_Global = [], idCategoria_Global = -1;
+
+$("#formCategoria").submit(function(e){
+	e.preventDefault();
+	ajax({
+		param: {
+			  'cadastrarCategoria': true
+			, 'descricao': $("#descricao").val()
+			, 'id_categoria': idCategoria_Global == -1 ? '' : categorias_Global[idCategoria_Global].id_categoria
+		}
+		, done: function(data){
+			console.log(data);
+			alert(data == 1 ? 'Categoria salva com sucesso' : 'Falha ao salvar categoria');
+			novoCategoria();
+			listaCategoria();
+		}
+	});
+});
+
+
+function novoCategoria(){
+	$("#descricao").val('')[0].focus();
+	idCategoria_Global = -1;
+}
+
+function listaCategoria(){
+	ajax({
+		  param: { 'listaCategoria': true }
+		, done: function(data){
+			console.log(data);
+			data = JSON.parse(data);
+			console.log(data);
+			categorias_Global = data;
+
+			if (!resolvGrade(data, {
+				inputs: [
+					{ head: 'Descrição', param: 'descricao', align: 'left', alignHead: 'center' }
+				]
+				, ck_edit: 		1
+				, ck_delete: 	1
+				, div: 			'#listaCategoria'
+				, descForm: 	'categoria'
+			})) alert('Falha ao resolver a grade de categoria!');
+		}
+	});
+}
+listaCategoria();
+
+
+function editarCategoria(indice){
+	$("#descricao").val(categorias_Global[indice].descricao);
+	idCategoria_Global = indice;
+	$("#add_menuCategoria")[0].click();
+}
+
+
+function apagarCategoria(indice){
+	if (!confirm("Tem certeza que deseja apagar esse registro?")) return false;
+	ajax({
+		param: {
+			  'apagarCategoria': true
+			, 'id_categoria': categorias_Global[indice].id_categoria
+		}
+		, done: function (data) {
+			alert(data == 1 ? 'A categoria foi apagada do sistema!' : 'Falha ao apagar categoria!');
+			novoCategoria();
+			listaCategoria();
+		}
+	})
+}
+
+
+
+$("#descricao").val('')[0].focus();
+
+</script>
+<style>
+	.padraoLinha{
+		padding: 0 !important;
+	}
+</style>

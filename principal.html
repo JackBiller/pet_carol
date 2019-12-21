@@ -118,8 +118,13 @@
 						</a>
 						<ul class="treeview-menu">
 							<li>
-								<a href="#" data-file="produto" onclick="abrirConteudo(this,'Produto');">
+								<a href="#" data-file="produto" onclick="abrirConteudo(this,'Produto','cadastro,Cadastro');">
 									<i class="fa fa-circle-o"></i> Produto
+								</a>
+							</li>
+							<li>
+								<a href="#" data-file="categoria" onclick="abrirConteudo(this,'Categoria','cadastro,Cadastro');">
+									<i class="fa fa-circle-o"></i> Categoria
 								</a>
 							</li>
 						</ul>
@@ -135,10 +140,7 @@
 					<span class="titulo_pagina">Blank page</span>
 					<!-- <small>modelo</small> -->
 				</h1>
-				<ol class="breadcrumb">
-					<li><a href="#">Principal</a></li>
-					<li class="active titulo_pagina">Blank page</li>
-				</ol>
+				<ol class="breadcrumb"></ol><!-- Caminho para chegar na pagina -->
 			</section>
 
 
@@ -172,6 +174,7 @@
 	<script src="biblioteca/dist/js/adminlte.min.js"></script>
 	<!-- AdminLTE for demo purposes -->
 	<script src="biblioteca/dist/js/demo.js"></script>
+	<script src="script.js"></script>
 	<script>
 		var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
 
@@ -181,10 +184,50 @@
 			// $(".btn-logoff").attr('onclick', function(){ logoff(); });
 			$(".btn-logoff")[0].onclick = function(){ logoff(); }
 			// $(".linkProduto")[0].onclick = function(){  }
+			abrirConteudo($(document.createElement('span')).attr('data-file','main'),'Principal');
 		})
 
 		function abrirConteudo(el, titulo){
 			$(".titulo_pagina").html(titulo);
+			var arg = arguments;
+			console.log(arg);
+
+			if(titulo == 'Principal'){
+				$(".breadcrumb").html(""
+					+ "<li class='active'>Principal</li>"
+				)
+			} else {
+				$(".breadcrumb").html(""
+					+ "<li><a href='#' data-file='main' onclick='abrirConteudo(this, \"Principal\")'>Principal</a></li>"
+					+ (arg.length < 2 ? '' : ""
+						+ (function(args){
+							var html = '';
+							for (var i = args.length-1; i >= 2; i--) {
+								html += ""
+									+ "<li>"
+									+ 	"<a href='#' data-file='" + args[i].split(',')[0] + "'"
+									+ 		" onclick='abrirConteudo(this,\"" + args[i].split(',')[1] + "\""
+									+ (i == 2 ? '' : ","
+										+ (function(argsI, i){
+											var htmlI = '';
+											for (var j = i; j >= 2; j--) 
+												htmlI += (htmlI == '' ? '' : ',') + "\"" + argsI[j] + "\"";
+											return htmlI;
+										}(args,(i-1)))
+									)
+									+		")'"
+									+ 	">"
+									+ 		args[i].split(',')[1]
+									+ 	"</a>"
+									+ "</li>"
+							}
+							return html;
+						}(arg))
+					)
+					+ "<li class='active'>" + titulo + "</li>"
+				)
+			}
+
 			$("#conteudo_pagina").html(""
 				+ "<img src='img/carrega.gif'>"
 			);
@@ -201,6 +244,8 @@
 			localStorage.removeItem('usuario');
 			window.location.assign('index.html');
 		}
+
+		
 	</script>
 </body>
 
