@@ -40,40 +40,78 @@
 			</tr>
 		</table>
 	</form>
-	<div id="campo"></div>
+	<div id="gradeProduto"></div>
 </div>
 <div class="box-footer">
 	<!-- Footer -->
 </div>
 
-<script>
-	$("#campo").html(""
-		+ "<h1>Ola</h1>"
-	)
 
+
+<script>
 	$("#formProduto").submit(function(e){
 		e.preventDefault();
-		$.ajax({
-			  url: 'controller/produto.php'
-			, type: 'POST'
-			, dataType: 'text'
-			, data: $.extend({}, usuario_Global, {
-				  'cadastrarProfuto': true
+		ajax({
+			param: {
+				  'cadastrarProduto': true
 				, 'nome': $("#nome").val()
 				, 'cor': $("#cor").val()
 				, 'categoria': $("#categoria").val()
-			})
-			, error: function(){
-				alert('Falha ao fazer a requisição!');
 			}
-		}).done(function(data){
-			console.log(data);
-			// if (data == 1) 	alert('Produto cadastrado com sucesso');
-			// else 			alert('Falha ao cadastrar produto');
-			alert(data == 1 ? 'Produto cadastrado com sucesso' : 'Falha ao cadastrar produto');
-			novoProduto();
+			, done: function(data){
+				console.log(data);
+				alert(data == 1 ? 'Produto cadastrado com sucesso' : 'Falha ao cadastrar produto');
+				novoProduto();
+				listarProduto();
+			}
 		})
 	})
+
+
+	function listarProduto(){
+		ajax({
+			param: {
+				'listaProduto': true
+			}
+			, done: function(data){
+				console.log(data);
+				data = JSON.parse(data);
+				console.log(data);
+				produto_Global = data;
+
+				if (!resolvGrade(data, {
+					inputs: [
+						  { head: 'Nome', param: 'nome', align: 'left', alignHead: 'center' }
+						, { head: 'Cor', param: 'cor', align: 'center', alignHead: 'center' }
+						, { head: 'Categoria', param: 'ds_categoria', align: 'center', alignHead: 'center' }
+					]
+					, ck_edit: 		1
+					, ck_delete: 	1
+					, div: 			'#gradeProduto'
+					, descForm: 	'produto'
+				})) alert('Falha ao resolver a grade de produto!');
+			}
+		})
+	}
+	listarProduto();
+
+	var produto_Global;
+	function apagarProduto(indice){
+		if (!confirm('Deseja mesmo apagar o produto?')) return false;
+		ajax({
+			param : {
+				'apagarProduto' : true
+				, 'id_produto' : produto_Global[indice].id_produto
+			}
+			, done: function(data){
+				console.log(data)
+				alert(data ==1 ?' Produto apagado' : 'Nao foi possivel apagar o produto'   );
+				novoProduto();
+				listarProduto();
+			}
+		})
+	}
+
 
 	function novoProduto() {
 		$("#nome").val('')[0].focus();

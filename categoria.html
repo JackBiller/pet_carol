@@ -78,6 +78,7 @@ $("#formCategoria").submit(function(e){
 });
 
 
+
 function novoCategoria(){
 	$("#descricao").val('')[0].focus();
 	idCategoria_Global = -1;
@@ -108,9 +109,9 @@ listaCategoria();
 
 
 function editarCategoria(indice){
-	$("#descricao").val(categorias_Global[indice].descricao);
 	idCategoria_Global = indice;
 	$("#add_menuCategoria")[0].click();
+	$("#descricao").val(categorias_Global[indice].descricao)[0].focus();
 }
 
 

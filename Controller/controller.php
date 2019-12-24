@@ -24,6 +24,8 @@ include "funcoes.php";
 
 
 include 'categoria.php';
+include 'produto.php';
+
 
 if (!empty($_POST['function'])){
 	$sql = "SELECT ...";

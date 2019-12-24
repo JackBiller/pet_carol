@@ -9,7 +9,7 @@ function resolvGrade(data, option){
 			ck_edit: (0|1)
 			ck_delete: (0|1)
 			div: '#id'
-			descForm: ''
+			descForm: '' // referica para a função de editar e apagar registros
 		}
 	*/
 	if (typeof(data) == 'string') {
