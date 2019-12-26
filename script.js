@@ -23,19 +23,19 @@ function resolvGrade(data, option){
 	if (data[0].debug == "OK"){
 		grade = ""
 			+ 	"<br>"
-			+ 	"<table class='table' border='1'>"
+			+ 	"<table class='table' id='tabela" + capitalize(option.descForm || '') + "' border='1'>"
 			+ 		"<thead>"
 			+ 			"<tr>"
 			+ (function(array){
 				var html = '';
 				for (var i = 0; i < array.length; i++) 
-					html += "<td align='" + (array[i].alignHead || (array[i].align || 'center')) + "' class='padraoLinha'>"
+					html += "<td align='" + (array[i].alignHead || (array[i].align || 'center')) + "' class='padraoLinhaH'>"
 						+ 		"<b>" + array[i].head + "</b>"
 						+ 	"</td>"
 				return html;
 			}(option.inputs))
-			+ (!(option.ck_edit 	|| false) ? "" : "<td align='center' class='padraoLinha'><b></b></td>")
-			+ (!(option.ck_delete 	|| false) ? "" : "<td align='center' class='padraoLinha'><b></b></td>")
+			+ (!(option.ck_edit 	|| false) ? "" : "<td align='center' class='padraoLinhaH'><b></b></td>")
+			+ (!(option.ck_delete 	|| false) ? "" : "<td align='center' class='padraoLinhaH'><b></b></td>")
 			+ 			"</tr>"
 			+ 		"</thead>"
 			+ 		"<tbody>"
@@ -70,6 +70,39 @@ function resolvGrade(data, option){
 			+ 	"</table>"
 	}
 	$((option.div || '')).html(grade);
+
+	var padination = data.length > 15 ? [15, data.length] : [data.length];
+	$("#tabela" + capitalize(option.descForm || '')).DataTable({
+		"language": {
+			"url": "biblioteca/bower_components/datatables.net/Portuguese.json",
+		}
+		, 'autoWidth' 		: false
+		// 'stripeClasses': (function(array){
+		// 	var returnAr = [];
+		// 	for (var i = 0; i < array.length; i++) returnAr.push('stripe'+i);
+		// 	return returnAr;
+		// })(objParamGrade_Global.stripTableColors),
+		// "columnDefs": [
+		// 	{"sType":"mynumeric","aTargets":[5,6,8,9,10]},
+		// 	{"sType":"mynumericTooltip","aTargets":[4,7]}
+		// ],
+		// "scrollX": true,
+		// "scrollX": '100%',
+		// "scrollY": 350,
+		// paging: false,	
+		// "lengthMenu": [ 15, 25, 50, 75, 100 ]
+		, lengthMenu: padination // [ 15, data.length ]
+		// dom: 'Bfrtip',
+		// dom: 'Blfrtip',
+		// "dom": '<lf<t>ip>',
+		// dom: '<"wrapper"flipt>',
+		// "dom": '<"top"i>rt<"bottom"flp><"clear">',
+		// "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>",
+		// dom: 'Blfrtip',
+		// buttons: [
+		// 	'copy', 'csv', 'excel', 'pdf', 'print'
+		// ]
+	});
 	return true;
 }
 
@@ -95,6 +128,51 @@ function resolvAbaMenu(array){
 			+ 	"</div>"
 	}
 	$("#conteudoAbaMenu").html(html);
+}
+
+
+function resolveMenu(menu){
+	var html = "";
+	for (var i = 0; i < menu.length; i++) {
+		if ((menu[i].header || '') != '')
+			html += "<li class=\"header\">"+menu[i].header+"</li>"
+		else if ((menu[i].itens || '') == '')
+			html += "<li class=\"treeview\">"
+				+ 		"<a href=\"#\"  data-file=\""+menu[i].file+"\" "
+				+ 			"onclick=\"abrirConteudo(this,'" + (menu[i].desc || '') + "');\""
+				+ 		">"
+				+ 			(menu[i].desc || '')
+				+ 		"</a>"
+				// + 		"<ul class=\"treeview-menu\">"
+				// + 			"<li><a href=\"principal.html\"><i class=\"fa fa-circle-o\"></i> Principal</a></li>"
+				// + 		"</ul>"
+				+ 	"</li>"
+		else {
+			html += ""
+				+ 	"<li class=\"treeview\">"
+				+ 		"<a href=\"#\">"
+				+ 			"<span>" + menu[i].desc + "</span>"
+				+ 			"<span class=\"pull-right-container\">"
+				+ 				"<i class=\"fa fa-angle-left pull-right\"></i>"
+				+ 			"</span>"
+				+ 		"</a>"
+				+ 		"<ul class=\"treeview-menu\">"
+			for (var j = 0; j < menu[i].itens.length; j++) {
+				html += "" 
+					+ 		"<li>"
+					+ 			"<a href=\"#\" data-file=\""+menu[i].itens[j].file+"\" "
+					+ 				"onclick=\"abrirConteudo(this,'"+menu[i].itens[j].desc+"','"+menu[i].file+","+menu[i].desc+"');\""
+					+ 			">"
+					+ 				"<i class=\"fa fa-circle-o\"></i> "+menu[i].itens[j].desc
+					+ 			"</a>"
+					+ 		"</li>"
+			}
+			html += ""
+				+ 		"</ul>"
+				+ 	"</li>"
+		}
+	}
+	return html;
 }
 
 

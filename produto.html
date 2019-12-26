@@ -100,12 +100,12 @@
 		if (!confirm('Deseja mesmo apagar o produto?')) return false;
 		ajax({
 			param : {
-				'apagarProduto' : true
-				, 'id_produto' : produto_Global[indice].id_produto
+				  'apagarProduto': true
+				, 'id_produto': produto_Global[indice].id_produto
 			}
 			, done: function(data){
 				console.log(data)
-				alert(data ==1 ?' Produto apagado' : 'Nao foi possivel apagar o produto'   );
+				alert(data ==1 ? 'Produto apagado' : 'Nao foi possivel apagar o produto');
 				novoProduto();
 				listarProduto();
 			}

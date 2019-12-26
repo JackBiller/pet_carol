@@ -22,7 +22,7 @@ class Generico extends PadraoObjeto {
 }
 
 
-function padraoResultado($pdo, $sql, $msm){
+function padraoResultado($pdo, $sql, $msm = 'Nenhum resultado encontrado!'){
 	$arrayResultado = array();
 	$verifica = $pdo->query($sql);
 	foreach ($verifica as $dados) {
@@ -33,7 +33,7 @@ function padraoResultado($pdo, $sql, $msm){
 }
 
 
-function padraoExecute($pdo, $sql, $table){
+function padraoExecute($pdo, $sql, $table = ''){
 	$stmt = $pdo->prepare($sql);
 	// echo $sql;
 	$resultado = $stmt->execute();
