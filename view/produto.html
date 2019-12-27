@@ -49,6 +49,7 @@
 
 
 <script>
+	var indice_Global;
 	$("#formProduto").submit(function(e){
 		e.preventDefault();
 		ajax({
@@ -57,6 +58,7 @@
 				, 'nome': $("#nome").val()
 				, 'cor': $("#cor").val()
 				, 'categoria': $("#categoria").val()
+				, 'id_produto':  indice_Global != -1 ? produto_Global[indice_Global].id_produto : 0
 			}
 			, done: function(data){
 				console.log(data);
@@ -95,6 +97,14 @@
 	}
 	listarProduto();
 
+	function editarProduto(indice) {
+		if (!confirm ('Deseja mesmo editar o produto ')) return false;
+		$('#nome').val(produto_Global[indice].nome);
+		$('#cor').val(produto_Global[indice].cor);
+		$('#categoria').val(produto_Global[indice].id_categoria);
+		indice_Global=indice;
+	}
+
 	var produto_Global;
 	function apagarProduto(indice){
 		if (!confirm('Deseja mesmo apagar o produto?')) return false;
@@ -117,5 +127,6 @@
 		$("#nome").val('')[0].focus();
 		$("#cor").val('#000');
 		$("#categoria").val('');
+		indice_Global = -1;
 	}
 </script>

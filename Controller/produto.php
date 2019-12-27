@@ -37,7 +37,7 @@ if (!empty($_POST['cadastrarProduto'])){
 	$cor 			= $_POST['cor'];
 	$id_categoria 	= $_POST['categoria'];
 
-	$sql = empty ($_POST['id_produto'])
+	$sql = empty($_POST['id_produto'])
 			? "INSERT INTO produto (nome, cor, id_categoria, id_usuario)
 				VALUES ('$nome', '$cor', $id_categoria, $id_usuario)"
 			: "UPDATE produto

@@ -79,7 +79,7 @@ function eviarEmail($title, $body, $email){
 
 function returnId($pdo, $hash){
 	$sql = "SELECT id_usuario FROM usuario WHERE hash = '$hash'";
-	$resultado = padraoResultado($pdo, $sql, 'Nenhum resultado encontrado!');
+	$resultado = padraoResultado($pdo, $sql);
 	$resultado = $resultado[0];
 	return $resultado->get('debug') == 'OK' ? $resultado->get('id_usuario') : false;
 }

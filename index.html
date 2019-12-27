@@ -20,8 +20,15 @@
 			<img src="img/carrega.gif">
 		</div>
 	</div>
+
+	<script src="biblioteca/bower_components/jquery/dist/jquery.min.js"></script>
 <script>
-	window.location.assign('login.html');
+	$.ajax({
+		  url: 'Controller/ping.php'
+		, error: function(){ window.location.assign('login'); }
+	}).done(function(data){
+		window.location.assign((data == '1' && localStorage.usuario ? 'principal' : 'login'));
+	});
 </script>
 </body>
 </html>

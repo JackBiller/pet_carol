@@ -5,12 +5,19 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title class="titulo_projeto">Carregando...</title>
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="stylesheet" href="biblioteca/bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="biblioteca/bower_components/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="biblioteca/bower_components/Ionicons/css/ionicons.min.css">
-	<link rel="stylesheet" href="biblioteca/dist/css/AdminLTE.min.css">
-	<link rel="stylesheet" href="biblioteca/plugins/iCheck/square/blue.css">
+	<link rel="stylesheet" href="../biblioteca/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../biblioteca/bower_components/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../biblioteca/bower_components/Ionicons/css/ionicons.min.css">
+	<link rel="stylesheet" href="../biblioteca/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../biblioteca/plugins/iCheck/square/blue.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<script>
+		var ext = (window.location.href.split('.')[1] || '').split('?')[0].split('#')[0];
+		if ((['html','php','htm']).indexOf(ext) != -1) {
+			var url = window.location.href.split('/');
+			window.location.assign(url.splice(0,url.length-1).join('/'));
+		}
+	</script>
 </head>
 <body class="hold-transition login-page">
 	<div class="login-box">
@@ -40,9 +47,9 @@
 			</form>
 		</div>
 	</div>
-	<script src="biblioteca/bower_components/jquery/dist/jquery.min.js"></script>
-	<script src="biblioteca/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="biblioteca/plugins/iCheck/icheck.min.js"></script>
+	<script src="../biblioteca/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../biblioteca/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../biblioteca/plugins/iCheck/icheck.min.js"></script>
 	<script>
 		$(function(){
 			$('input').iCheck({
@@ -52,7 +59,7 @@
 			});
 		});
 
-		$.getJSON("config.json",function(data){
+		$.getJSON("../config.json",function(data){
 			console.log(data);
 			$(".titulo_projeto").html((data.nome_projeto || ''));
 			if ((data.login || '') != ''){
@@ -81,7 +88,7 @@
 
 				if (data[0].debug == 'OK'){
 					localStorage.setItem('usuario',JSON.stringify(data[0]));
-					window.location.assign('principal.html');
+					window.location.assign('../principal');
 				} else {
 					alert('Login inválido!');
 					$("#login").val('')[0].focus();
